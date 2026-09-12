@@ -51,7 +51,6 @@
             transform: scale(0.98);
         }
 
-        /* Spezielle Warn-Farbe für den Neustart */
         .btn-danger {
             background-color: #ff3b30;
             color: white;
@@ -63,17 +62,18 @@
     <h2>Zentrale Steuerung</h2>
 
     <div class="btn-group">
-        <button onclick="sendCommand('command0')">ℹ️ Hilfe</button>
-        <button onclick="sendCommand('command1')">🌡️ Heizungssteuerung</button>
-        <button onclick="sendCommand('command2')">📊 Status</button>
-        <button onclick="sendCommand('command3')">🤖 KI Steuerung</button>
-        <button onclick="sendCommand('command4')">🐟 Teich</button>
-        <button onclick="sendCommand('command5')">🔌 Gerätesteuerung</button>
-        <button onclick="sendCommand('command7')">📅 Veranstaltungen</button>
-        <button onclick="sendCommand('command8')">⛽ Tankstelle</button>
-        <button onclick="sendCommand('command9')">⚡ Flex Strom Analyzer</button>
-        <button class="btn-danger" onclick="sendCommand('command10')">⚠️ SmartHome Neustart</button>
-        <button onclick="sendCommand('command11')">🛒 Einkaufsliste</button>
+        <!-- Der Befehl enthält jetzt den führenden Schrägstrich -->
+        <button onclick="sendCommand('/command0')">ℹ️ Hilfe</button>
+        <button onclick="sendCommand('/command1')">🌡️ Heizungssteuerung</button>
+        <button onclick="sendCommand('/command2')">📊 Status</button>
+        <button onclick="sendCommand('/command3')">🤖 KI Steuerung</button>
+        <button onclick="sendCommand('/command4')">🐟 Teich</button>
+        <button onclick="sendCommand('/command5')">🔌 Gerätesteuerung</button>
+        <button onclick="sendCommand('/command7')">📅 Veranstaltungen</button>
+        <button onclick="sendCommand('/command8')">⛽ Tankstelle</button>
+        <button onclick="sendCommand('/command9')">⚡ Flex Strom Analyzer</button>
+        <button class="btn-danger" onclick="sendCommand('/command10')">⚠️ SmartHome Neustart</button>
+        <button onclick="sendCommand('/command11')">🛒 Einkaufsliste</button>
     </div>
 
     <script>
