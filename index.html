@@ -23,11 +23,17 @@
             color: var(--tg-theme-hint-color, #888888);
         }
 
-        .btn-group {
-            display: flex;
+        /* Standardmäßig sind alle Seiten ausgeblendet */
+        .page {
+            display: none;
             flex-direction: column;
             gap: 10px;
             padding-bottom: 20px;
+        }
+
+        /* Nur die aktive Seite wird als Flexbox angezeigt */
+        .page.active {
+            display: flex;
         }
 
         button {
@@ -55,25 +61,53 @@
             background-color: #ff3b30;
             color: white;
         }
+        
+        /* Spezielles Styling für Status-Buttons */
+        .btn-info {
+            background-color: var(--tg-theme-secondary-bg-color, #e5e5ea);
+            color: var(--tg-theme-text-color, #000000);
+        }
     </style>
 </head>
 <body>
 
     <h2>Zentrale Steuerung</h2>
 
-    <div class="btn-group">
-        <!-- Der Befehl enthält jetzt den führenden Schrägstrich -->
+    <!-- HAUPTMENÜ -->
+    <div id="main-menu" class="page active">
+        <!-- sendCommand schließt die App direkt, showPage wechselt das Menü -->
         <button onclick="sendCommand('/command0')">ℹ️ Hilfe</button>
-        <button onclick="sendCommand('/command1')">🌡️ Heizungssteuerung</button>
+        <button onclick="showPage('menu-heizung')">🌡️ Heizungssteuerung</button>
         <button onclick="sendCommand('/command2')">📊 Status</button>
         <button onclick="sendCommand('/command3')">🤖 KI Steuerung</button>
-        <button onclick="sendCommand('/command4')">🐟 Teich</button>
-        <button onclick="sendCommand('/command5')">🔌 Gerätesteuerung</button>
+        <button onclick="showPage('menu-teich')">🐟 Teich</button>
+        <button onclick="showPage('menu-geraete')">🔌 Gerätesteuerung</button>
         <button onclick="sendCommand('/command7')">📅 Veranstaltungen</button>
         <button onclick="sendCommand('/command8')">⛽ Tankstelle</button>
         <button onclick="sendCommand('/command9')">⚡ Flex Strom Analyzer</button>
         <button class="btn-danger" onclick="sendCommand('/command10')">⚠️ SmartHome Neustart</button>
         <button onclick="sendCommand('/command11')">🛒 Einkaufsliste</button>
+    </div>
+
+    <!-- UNTERMENÜ: HEIZUNG -->
+    <div id="menu-heizung" class="page">
+        <button onclick="sendCommand('/heizung_auto')">🌡️ Automatikmodus</button>
+        <button onclick="sendCommand('/heizung_urlaub')">✈️ Urlaubsmodus</button>
+        <button onclick="sendCommand('/heizung_boost')">🔥 Boost</button>
+    </div>
+
+    <!-- UNTERMENÜ: TEICH -->
+    <div id="menu-teich" class="page">
+        <button onclick="sendCommand('/skimmer_on')">🌊 Skimmer (60W) Ein</button>
+        <button class="btn-info" onclick="sendCommand('/skimmer_off')">🌊 Skimmer Aus</button>
+        <button onclick="sendCommand('/pumpe_on')">💧 Filterpumpe Ein</button>
+        <button class="btn-info" onclick="sendCommand('/pumpe_off')">💧 Filterpumpe Aus</button>
+    </div>
+
+    <!-- UNTERMENÜ: GERÄTESTEUERUNG -->
+    <div id="menu-geraete" class="page">
+        <button onclick="sendCommand('/waschmaschine_start')">🧺 Waschmaschine Starten</button>
+        <button class="btn-info" onclick="sendCommand('/waschmaschine_status')">🧺 Status Waschmaschine</button>
     </div>
 
     <script>
@@ -82,6 +116,30 @@
         tg.expand();
         tg.ready();
 
+        // Funktion zum Wechseln der Seiten
+        function showPage(pageId) {
+            // Alle Seiten verstecken
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Gewünschte Seite anzeigen
+            document.getElementById(pageId).classList.add('active');
+
+            // Telegram "Zurück"-Button in der Kopfzeile einblenden, wenn wir nicht im Hauptmenü sind
+            if (pageId === 'main-menu') {
+                tg.BackButton.hide();
+            } else {
+                tg.BackButton.show();
+            }
+        }
+
+        // Was passiert, wenn man oben links auf den Telegram-Pfeil "Zurück" drückt?
+        tg.BackButton.onClick(() => {
+            showPage('main-menu');
+        });
+
+        // Funktion zum Senden des finalen Befehls
         function sendCommand(cmd) {
             tg.sendData(cmd);
         }
